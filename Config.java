@@ -37,28 +37,35 @@ import java.util.Scanner;
 
 
         /*Logic to parse file, insert into graph function in new.gv file. Then executes command 
-        to open png file*/
-        writeToGVFile(textFile);
-        openPngFile();
+        to open png file. The png image will show a picture of the desired network. These functions, 
+        however, are not essential to the program and may be commented out.*/
+        //writeToGVFile(textFile);
+        //openPngFile();
 
-       
-        //Logic to configure in NDN mode or IP Addressing
-        if(args.length >0){
-            if(args[0].charAt(0) == '-' && Character.toUpperCase(args[0].charAt(1)) == 'N'){
-            switchToNDN();
+
+        
+        //Default ping count will be 10, unless otherwise specified by user in command-line argument
+        int ping_count_custom=10;
+       for(int i = args.length-1; i>=0; i--){
+            //Customize ping count
+            if(args[i].equals("-pc")){
+                try {
+                    ping_count_custom = Integer.parseInt(args[i+1]);
+                } catch (Exception e) {
+                    System.out.println(e);
+                    System.out.println("Invalid use of -pc. You must provide an integer greater than 0 after the -pc argument.");
+                    System.exit(1);
+                }
             }
-            else{
-                System.out.println("\n\nInvalid command line argument. Enter -n or -N to run program in NDN mode.");
-                System.out.println("Otherwise, run program without any command line arguments. Default will run in IP addressing mode");
-                System.exit(0);
-            }
-        }
-        //Else the default without arguments is IP Addressing mode. Continue remainder of code
-       
+           //Execute configuration in NDN mode
+            if(args[i].equals("-n")){
+               switchToNDN();
+           }  
+       }
 
        /*IP Addressing Mode
        Logic to find shortest path*/
-       startShortestPathSearch(textFile);   
+       startShortestPathSearch(textFile, ping_count_custom);   
     }                  
 
 
@@ -68,7 +75,7 @@ import java.util.Scanner;
       ------------------       FUNCTIONS    ----------------------------
       -----------------------------------------------------------------*/
 
-    public static void startShortestPathSearch(File textFile) throws Exception{
+    public static void startShortestPathSearch(File textFile, int ping_count_custom) throws Exception{
           //Scan textfile 
           Scanner scan = new Scanner(textFile);
           //Number of nodes is the first integer in file
@@ -117,7 +124,10 @@ import java.util.Scanner;
 
                FileWriter piConfig_writer = new FileWriter(piConfigFile);
 
-              //Find all of curr_pi's connections to every other pi 
+               //Write the custom ping count here
+                piConfig_writer.write(ping_count_custom + "\n");
+    
+                //Find all of curr_pi's connections to every other pi 
               for(int j = 0; j < v; j++){
                   //Number of destination PI
                   dest = j+1; //j+1 because we do not have a PI with the number 0, all PI's are labeled 1-n
