@@ -36,9 +36,11 @@ import java.util.Scanner;
         File textFile = new File("networkInput.txt");
 
 
-        /*Logic to parse file, insert into graph function in new.gv file. Then executes command 
+        /*Logic to parse file and insert data into graph function in new.gv file. Then executes command 
         to open png file. The png image will show a picture of the desired network. These functions, 
-        however, are not essential to the program and may be commented out.*/
+        however, are not essential to the program and may be commented out. (writeToGVFile() and openPngFile())
+        
+        If you choose to use these functions, then be sure to first review important instructions located in the openPngFile() function.   */
         //writeToGVFile(textFile);
         //openPngFile();
 
@@ -145,8 +147,8 @@ import java.util.Scanner;
 
     //Function to send config files to pis
     public static void sendConfigFilesToPI(int current_node, String piConfigFile) throws Exception{
-        runProcess("scp " + piConfigFile + " epharra" + current_node+ "@10.0.0." + current_node + ":~/RequiredForPICONFIG");
-        runProcess("ssh epharra" + current_node + "@10.0.0." + current_node + " ./RequiredForPICONFIG/configRoutes.sh");
+        runProcess("scp " + piConfigFile + " umslpi" + current_node+ "@10.0.0." + current_node + ":~/RequiredForPICONFIG");
+        runProcess("ssh umslpi" + current_node + "@10.0.0." + current_node + " ./RequiredForPICONFIG/configRoutes.sh");
         runProcess("rm " + piConfigFile);
         
     }
@@ -162,8 +164,8 @@ import java.util.Scanner;
         sshingFileWriter.write("#!/bin/bash");
 
         for(int i = 0; i <nodes; i++){
-            sshingFileWriter.write("\nssh epharra" + (i+1) + "@10.0.0." + (i+1) + " ./RequiredForPICONFIG/pingTest.sh");
-            sshingFileWriter.write("\nssh epharra" + (i+1) + "@10.0.0." + (i+1) + " ./RequiredForPICONFIG/SCPTest.sh");
+            sshingFileWriter.write("\nssh umslpi" + (i+1) + "@10.0.0." + (i+1) + " ./RequiredForPICONFIG/pingTest.sh");
+            sshingFileWriter.write("\nssh umslpi" + (i+1) + "@10.0.0." + (i+1) + " ./RequiredForPICONFIG/SCPTest.sh");
         }
         sshingFileWriter.close();
         runProcess("./sshingIntoPi.sh");

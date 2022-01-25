@@ -20,8 +20,8 @@ public class ClearConfig {
                 //For each pi in network, ssh into it and run the removeRoutes.sh script that is on each of them
                 //Also remove all plots, per the command line argument option
                 for(int i = 0; i < nodes; i++){
-                    Config.runProcess("ssh epharra" + (i+1) + "@10.0.0." + (i+1) + " ./RequiredForPICONFIG/removeRoutes.sh");
-                    Config.runProcess("ssh epharra" + (i+1) + "@10.0.0." + (i+1) + " ./RequiredForPICONFIG/removePlots.sh");
+                    Config.runProcess("ssh umslpi" + (i+1) + "@10.0.0." + (i+1) + " ./RequiredForPICONFIG/removeRoutes.sh");
+                    Config.runProcess("ssh umslpi" + (i+1) + "@10.0.0." + (i+1) + " ./RequiredForPICONFIG/removePlots.sh");
                  }
             }
             //Else invalid argument
@@ -35,7 +35,7 @@ public class ClearConfig {
         
         //Default clearConfig is to remove only the routes from routing table
         for(int i = 0; i < nodes; i++){
-            Config.runProcess("ssh epharra" + (i+1) + "@10.0.0." + (i+1) + " ./RequiredForPICONFIG/removeRoutes.sh");
+            Config.runProcess("ssh umslpi" + (i+1) + "@10.0.0." + (i+1) + " ./RequiredForPICONFIG/removeRoutes.sh");
          }
                  
         scan.close();
